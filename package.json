@@ -1,6 +1,10 @@
 {
   "name": "chadgarlandscg-express-react-template",
   "version": "0.0.2",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/chadgarlandscg/chadgarlandscg-express-react-template"
+  },
   "scripts": {
     "start": "npm run web & npm run server",
     "server": "supervisor ./bin/www",
