@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/the-react-redux-express.iml" filepath="$PROJECT_DIR$/.idea/the-react-redux-express.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/react-redux-express-scripts.iml" filepath="$PROJECT_DIR$/.idea/react-redux-express-scripts.iml" />
     </modules>
   </component>
 </project>

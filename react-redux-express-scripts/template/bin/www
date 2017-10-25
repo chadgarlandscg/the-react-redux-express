@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('chadgarlandscg-express-react-react-redux-express-templates:server');
+var debug = require('debug')('chadgarlandscg-express-react-template:server');
 var http = require('http');
 
 /**

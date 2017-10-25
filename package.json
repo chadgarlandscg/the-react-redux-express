@@ -1,43 +1,31 @@
 {
-  "name": "chadgarlandscg-express-react-template",
-  "version": "0.0.3",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/chadgarlandscg/chadgarlandscg-express-react-template"
+  "name": "the-react-redux-express",
+  "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chadgarlandscg/the-react-redux-express"
   },
-  "scripts": {
-    "start": "npm run web & npm run server",
-    "server": "supervisor ./bin/www",
-    "web": "watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] public/src/index.js -o public/src/bundle.js -v",
-    "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] public/src/index.js -o public/src/bundle.js",
-    "prod": "npm run build | uglifyjs -mc warnings=false > public/src/bundle.js"
+  "engines": {
+    "node": ">=4"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react",
-      "stage-0"
-    ],
-    "plugins": [
-      "babel-plugin-transform-decorators-legacy"
-    ]
+  "files": [
+    "create-react-redux-express-app.js"
+  ],
+  "bin": {
+    "create-app": "create-react-redux-express-app.js"
   },
   "dependencies": {
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
-    "express": "~4.15.5",
-    "express-react-views": "^0.10.4",
-    "morgan": "~1.9.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "serve-favicon": "~2.4.5"
-  },
-  "devDependencies": {
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.22.0",
-    "babelify": "^7.3.0"
+    "chalk": "^2.2.0",
+    "child_process": "^1.0.2",
+    "commander": "^2.11.0",
+    "cross-spawn": "^5.1.0",
+    "dns": "^0.2.2",
+    "fs-extra": "^4.0.2",
+    "hyperquest": "^2.1.2",
+    "path": "^0.12.7",
+    "semver": "^5.4.1",
+    "tar-pack": "^3.4.0",
+    "tmp": "0.0.33",
+    "validate-npm-package-name": "^3.0.0"
   }
 }
