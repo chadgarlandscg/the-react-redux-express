@@ -4541,7 +4541,7 @@ var ReactDOMServerRenderer = function () {
       var initialValue = props.value;
       if (initialValue == null) {
         var defaultValue = props.defaultValue;
-        // TODO (yungsters): Remove support for children content in <textarea>.
+        // TODO (yungsters): Remove support for children react in <textarea>.
         var textareaChildren = props.children;
         if (textareaChildren != null) {
           {
@@ -9266,7 +9266,7 @@ var didWarnValDefaultVal = false;
  * order for the rendered element to be updated.
  *
  * The rendered element will be initialized with an empty value, the prop
- * `defaultValue` if specified, or the children content (deprecated).
+ * `defaultValue` if specified, or the children react (deprecated).
  */
 var ReactDOMTextarea = {
   getHostProps: function (element, props) {
@@ -9304,7 +9304,7 @@ var ReactDOMTextarea = {
     // Only bother fetching default value if we're going to use it
     if (value == null) {
       var defaultValue = props.defaultValue;
-      // TODO (yungsters): Remove support for children content in <textarea>.
+      // TODO (yungsters): Remove support for children react in <textarea>.
       var children = props.children;
       if (children != null) {
         {
@@ -10805,7 +10805,7 @@ var getIntrinsicNamespace$1 = DOMNamespaces.getIntrinsicNamespace;
       return;
     }
     didWarnInvalidHydration = true;
-    warning$3(false, 'Text content did not match. Server: "%s" Client: "%s"', serverText, clientText);
+    warning$3(false, 'Text react did not match. Server: "%s" Client: "%s"', serverText, clientText);
   };
 
   var warnForPropDifference = function (propName, serverValue, clientValue) {
@@ -11429,12 +11429,12 @@ var ReactDOMFiberComponent = {
       }
       var nextProp = rawProps[propKey];
       if (propKey === CHILDREN) {
-        // For text content children we compare against textContent. This
+        // For text react children we compare against textContent. This
         // might match additional HTML that is hidden when we read it using
         // textContent. E.g. "foo" will match "f<span>oo</span>" but that still
         // satisfies our requirement. Our requirement is not to produce perfect
         // HTML and attributes. Ideally we should preserve structure but it's
-        // ok not to if the visible content is still enough to indicate what
+        // ok not to if the visible react is still enough to indicate what
         // even listeners these nodes might be wired up to.
         // TODO: Warn if there is more than a single textNode as a child.
         // TODO: Should we use domElement.firstChild.nodeValue to compare?
@@ -15309,7 +15309,7 @@ var ReactFiberBeginWork = function (config, hostContext, hydrationContext, sched
       nextChildren = null;
     } else if (prevProps && shouldSetTextContent(type, prevProps)) {
       // If we're switching from a direct text child to a normal child, or to
-      // empty, we need to schedule the text content to be reset.
+      // empty, we need to schedule the text react to be reset.
       workInProgress.effectTag |= ContentReset$1;
     }
 
@@ -16177,7 +16177,7 @@ var ReactFiberCommitWork = function (config, captureError) {
         invariant(false, 'Invalid host parent fiber. This error is likely caused by a bug in React. Please file an issue.');
     }
     if (parentFiber.effectTag & ContentReset$2) {
-      // Reset the text content of the parent before doing any insertions
+      // Reset the text react of the parent before doing any insertions
       resetTextContent(parent);
       // Clear ContentReset from the effect tag
       parentFiber.effectTag &= ~ContentReset$2;
@@ -16741,7 +16741,7 @@ var ReactFiberHydrationContext = function (config) {
       switch (returnFiber.tag) {
         // TODO: Currently we don't warn for insertions into the root because
         // we always insert into the root in the non-hydrating case. We just
-        // delete the existing content. Reenable this once we have a better
+        // delete the existing react. Reenable this once we have a better
         // strategy for determining if we're hydrating or not.
         // case HostRoot:
         //   parentInstance = returnFiber.stateNode.containerInfo;
@@ -16865,7 +16865,7 @@ var ReactFiberHydrationContext = function (config) {
 
     // If we have any remaining hydratable nodes, we need to delete them now.
     // We only do this deeper than head and body since they tend to have random
-    // other nodes in them. We also ignore components with pure text content in
+    // other nodes in them. We also ignore components with pure text react in
     // side of them.
     // TODO: Better heuristic.
     if (fiber.tag !== HostComponent$10 || type !== 'head' && type !== 'body' && !shouldSetTextContent(type, fiber.memoizedProps)) {
@@ -18487,9 +18487,9 @@ var getNodeForCharacterOffset_1 = getNodeForCharacterOffset;
 var contentKey = null;
 
 /**
- * Gets the key used to access text content on a DOM node.
+ * Gets the key used to access text react on a DOM node.
  *
- * @return {?string} Key used to access text content.
+ * @return {?string} Key used to access text react.
  * @internal
  */
 function getTextContentAccessor() {
@@ -19527,11 +19527,11 @@ var EventPropagators = {
 var EventPropagators_1 = EventPropagators;
 
 /**
- * This helper object stores information about text content of a target node,
- * allowing comparison of content before and after a given event.
+ * This helper object stores information about text react of a target node,
+ * allowing comparison of react before and after a given event.
  *
  * Identify the node where selection currently begins, then observe
- * both its text content and its current position in the DOM. Since the
+ * both its text react and its current position in the DOM. Since the
  * browser may natively replace the target node during composition, we can
  * use its position to find its replacement.
  * 
@@ -22018,7 +22018,7 @@ function renderSubtreeIntoContainer(parentComponent, children, container, forceH
     if (container._reactRootContainer && container.nodeType !== COMMENT_NODE) {
       var hostInstance = DOMRenderer.findHostInstanceWithNoPortals(container._reactRootContainer.current);
       if (hostInstance) {
-        warning(hostInstance.parentNode === container, 'render(...): It looks like the React-rendered content of this ' + 'container was removed without using React. This is not ' + 'supported and will cause errors. Instead, call ' + 'ReactDOM.unmountComponentAtNode to empty a container.');
+        warning(hostInstance.parentNode === container, 'render(...): It looks like the React-rendered react of this ' + 'container was removed without using React. This is not ' + 'supported and will cause errors. Instead, call ' + 'ReactDOM.unmountComponentAtNode to empty a container.');
       }
     }
 
@@ -22034,7 +22034,7 @@ function renderSubtreeIntoContainer(parentComponent, children, container, forceH
   var root = container._reactRootContainer;
   if (!root) {
     var shouldHydrate = forceHydrate || shouldHydrateDueToLegacyHeuristic(container);
-    // First clear any existing content.
+    // First clear any existing react.
     if (!shouldHydrate) {
       var warned = false;
       var rootSibling = void 0;
@@ -24829,7 +24829,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Table = require('./Table');
+var _Table = require('./react/Table');
 
 var _Table2 = _interopRequireDefault(_Table);
 
@@ -25046,7 +25046,7 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _App = require('./App');
+var _App = require('./react/App');
 
 var _App2 = _interopRequireDefault(_App);
 

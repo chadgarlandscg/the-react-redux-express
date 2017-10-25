@@ -7,10 +7,10 @@
   },
   "scripts": {
     "start": "npm run web & npm run server",
-    "server": "supervisor ./bin/www",
-    "web": "watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] public/src/index.js -o public/src/bundle.js -v",
-    "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] public/src/index.js -o public/src/bundle.js",
-    "prod": "npm run build | uglifyjs -mc warnings=false > public/src/bundle.js",
+    "server": "supervisor ./server/bin/www",
+    "web": "watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/src/bundle.js -v",
+    "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/src/bundle.js",
+    "prod": "npm run build | uglifyjs -mc warnings=false > web/src/bundle.js",
     "init": "sh init.sh"
   },
   "babel": {
