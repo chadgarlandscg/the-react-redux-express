@@ -64,6 +64,8 @@ const initialize = (appPath, appName, verbose, originalDir, template) => {
                     const data = fs.readFilesSync(path.join(appPath, 'gitignore'))
                     fs.appendFileSync(path.join(appPath, 'gitignore'), data)
                     fs.unlinkSync(path.join(appPath, 'gitignore'))
+                } else if (err.code === 'ENOENT') {
+                    return
                 } else {
                     throw err
                 }
@@ -124,10 +126,10 @@ const initialize = (appPath, appName, verbose, originalDir, template) => {
 
     console.log()
     console.log(`Success! Created, ${appName} at ${appPath}`)
-    console.log(`inside, you can run some commands`)
-    console.log('npm bundle')
-    console.log('npm build')
-    console.log('npm test')
+    console.log(`inside, you should run these commands`)
+    console.log('npm run init (if you haven\'t already)')
+    console.log('npm install (if you already have the globals)')
+    console.log('npm start (to get the train a-chuggin\')')
     console.log(chalk.cyan(' cd'), cdpath)
     if (readmeExists) {
         console.log();
@@ -138,7 +140,7 @@ const initialize = (appPath, appName, verbose, originalDir, template) => {
         );
     }
     console.log();
-    console.log('woot woot.');
+    console.log('choo choo!');
 
 }
 

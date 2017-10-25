@@ -6,7 +6,7 @@ var path = require('path');
 router.get('/', function(req, res, next) {
   // res.render('index', { title: 'Express' });
   //   res.render('index');
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendfile('/web/public/index.html', {'root': __dirname + '../../../../'});
 });
 
 module.exports = router;

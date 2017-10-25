@@ -10,7 +10,7 @@ var users = require('./src/routes/counter');
 
 var app = express();
 
-app.set('views', __dirname + '/public/src');
+app.set('views', __dirname + '/web/public/src');
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 
@@ -18,33 +18,32 @@ app.engine('jsx', require('express-react-views').createEngine());
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../web/public')));
 
-app.get('/testing', function(req, res, next) {
-    res.sendFile(__dirname + '/public/index.html');
-});
-
-app.use('/main', index);
 app.use('/counter', users);
 
+app.get('*', (req, res) => {
+    res.sendfile('/web/public/index.html', {'root': __dirname + '../'});
+})
+
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.send(err.message);
+    // render the error page
+    res.status(err.status || 500);
+    res.send(err.message);
 });
 
 module.exports = app;

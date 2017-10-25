@@ -1,6 +1,6 @@
 {
   "name": "react-redux-express-scripts",
-  "version": "1.0.1",
+  "version": "1.0.6",
   "description": "scripts for react redux express app generator",
   "main": "index.js",
   "scripts": {
