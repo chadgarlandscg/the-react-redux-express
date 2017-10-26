@@ -249,7 +249,6 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
 
     console.log(chalk.magenta('initializing...'))
 
-    const ownPackage = require(path.join (__dirname, appName, 'package.json')).name
     const ownPath = path.join(appPath, 'node_modules', packageName)
 
     const types = [

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Table from './Table';
+import ConnectedSample from '/.ConnectedSample'
 
 class App extends Component {
     render() {
@@ -15,6 +16,7 @@ class App extends Component {
                 <h2>
                     Test with Brandy!
                 </h2>
+                <ConnectedSample/>
                 <Table/>
             </div>
         );
