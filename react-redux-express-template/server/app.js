@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, '../web/public')));
 app.use('/counter', users);
 
 app.get('*', (req, res) => {
-    res.sendfile('/web/public/index.html', {'root': __dirname + '../'});
+    res.sendfile('/web/public/index.html', {'root': __dirname + '/../'});
 })
 
 // catch 404 and forward to error handler
