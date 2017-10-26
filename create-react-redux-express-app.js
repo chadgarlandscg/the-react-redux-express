@@ -1,5 +1,14 @@
 #!/usr/bin/env node
 
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
 'use strict'
 
 const chalk = require('chalk')
@@ -10,12 +19,23 @@ const path = require('path')
 const execSync = require('child_process').execSync
 const spawn = require('cross-spawn')
 const semver = require('semver')
-const dns = require('dns')
 const tmp = require('tmp')
 const unpack = require('tar-pack').unpack
 const hyperquest = require('hyperquest')
-const packJson = require('./package.json')
 
+const currentPackageJSON = require('./package.json')
+
+const helpLog = () => {
+    console.log('help: ')
+    console.log('--ts for typescript')
+}
+
+const undefinedProjectName = () => {
+    console.error(chalk.red('specify the project directory:'))
+    console.log( '$ ' + chalk.magenta(reactExpressTemplate.name()) + chalk.cyan(' <project-directory>'))
+    console.log()
+    console.log('run ' + chalk.magenta(reactExpressTemplate.name() + '--help ') + 'for options')
+}
 
 const currentNodeVersion = process.versions.node
 if (currentNodeVersion.split('.')[0] < 4) {
@@ -24,30 +44,28 @@ if (currentNodeVersion.split('.')[0] < 4) {
             'Update Node Version.'
         )
     )
-    process.exit(1)  //exit with failure code.
+    process.exit(1)
 }
 
 let projectName
 
-const program = commander
+const templateCreator = commander
 
-program
-    .version(packJson.version)
+templateCreator
+    .version(currentPackageJSON.version)
     .arguments('<project-directory>')
     .usage(chalk.magenta('<project-directory>') + ' [options] ')
-    .action((name) => {
-        projectName = name
-    })
+    .action((name) => { projectName = name})
     .option('--verbose', 'print additional logs')
-    .option('--scripts-version <alternative-package>', 'use a non-standard react-scripts version')
-    .allowUnknownOption()
-    .on('--help', () => {
-        console.log('some help....')
-    })
-    .parse(process.argv)
+    .option('--template-version <alternative-package>', 'use a different template')
+    .option('--no additional-packages', 'only use dependencies from your template')
+    .option('--ts', 'include typescript extras')
+    .allowUnknownOption().on('--help', ()=> {
+    helpLog()
+}).parse(process.argv)
 
-if (typeof projectName === 'undefined') {
-    console.error('specificy project directory')
+if (typeof projectName === 'undefined'){
+    console.error(() => {undefinedProjectName()})
     process.exit(1)
 }
 
@@ -58,11 +76,6 @@ const printValidationResults = (results) => {
         })
     }
 }
-
-const hiddenProgram = new commander.Command()
-    .option('--internal-testing-template <path-to-template>', 'use a non-standard application template (internal use)')
-
-
 
 const getTemporaryDirectory = () => {
     return new Promise((resolve, reject) => {
@@ -116,8 +129,11 @@ const getPackageName = (installPackage) => {
     return Promise.resolve(installPackage)
 }
 
-const getInstallPackage = (version) => {
-    let packageToInstall = 'react-redux-express-scripts'
+const getInstallPackage = (version, ts) => {
+    let packageToInstall = 'react-redux-express-template'
+    if (ts) {
+        packageToInstall = 'react-redux-express-ts-template'
+    }
     const validSemVer = semver.valid(version)
     if (validSemVer) {
         packageToInstall += '@' + validSemVer
@@ -125,55 +141,6 @@ const getInstallPackage = (version) => {
         packageToInstall = version
     }
     return packageToInstall
-}
-
-
-const extractStream = (stream, dest) => {
-    return new Promise((resolve, reject) => {
-        stream.pipe(unpack(dest, (err) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(dest)
-            }
-        }))
-    })
-}
-
-
-
-const checkNpmVersion = () => {
-    let isNpm2 = false
-    try {
-        const npmVersion = execSync('npm --version').toString()
-        isNpm2 = semver.lt(npmVersion, '3.0.0')
-    } catch (err) {
-        return
-    }
-    if (!isNpm2) {
-        return
-    }
-    console.log('you are using npm 2, upgrate to npm 3 or yarn for faster install and less disk usage')
-}
-
-const checkNodeVersion = (packageName) => {
-    const packageJsonPath = path.resolve(
-        process.cwd(),
-        'node_modules',
-        packageName,
-        'package.json'
-    )
-    const packageJson= require(packageJsonPath)
-    if (!packageJson.engines || !packageJson.engines.node) {
-        return
-    }
-
-    if (!semver.satisfies(process.version, packageJson.engines.node)) {
-        console.error(
-            'outdated version of node, update it.', process.version, packageJson.engines.node
-        )
-        process.exit(1)
-    }
 }
 
 const checkAppName = (appName) => {
@@ -196,22 +163,50 @@ const checkAppName = (appName) => {
 
 }
 
-const makeCaretRange = (dependencies, name) => {
-    const version = dependencies[name]
-    if (typeof version === 'undefined') {
-        console.error('missing' + name + 'in package.json')
+const extractStream = (stream, dest) => {
+    return new Promise((resolve, reject) => {
+        stream.pipe(unpack(dest, (err) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(dest)
+            }
+        }))
+    })
+}
+
+const checkNpmVersion = () => {
+    let isNpm2 = false
+    try {
+        const npmVersion = execSync('npm --version').toString()
+        isNpm2 = semver.lt(npmVersion, '3.0.0')
+    } catch (err) {
+        return
+    }
+    if (!isNpm2) {
+        return
+    }
+    console.log('you are using npm 2, upgrade to npm 3 or yarn for faster install and less disk usage')
+}
+
+const checkNodeVersion = (packageName) => {
+    const packageJsonPath = path.resolve(
+        process.cwd(),
+        'node_modules',
+        packageName,
+        'package.json'
+    )
+    const packageJson= require(packageJsonPath)
+    if (!packageJson.engines || !packageJson.engines.node) {
+        return
+    }
+
+    if (!semver.satisfies(process.version, packageJson.engines.node)) {
+        console.error(
+            'outdated version of node, update it.', process.version, packageJson.engines.node
+        )
         process.exit(1)
     }
-    let patchedVersion = '^' + version
-    if (!semver.validRange(patchedVersion)) {
-        console.error(
-            'unable to patch', name, 'dependency version invalid'
-        )
-        patchedVersion = version
-    }
-
-    dependencies[name] = patchedVersion
-
 }
 
 const fixDependencies = (packageName) => {
@@ -236,9 +231,6 @@ const fixDependencies = (packageName) => {
     packageJson.devDependencies[packageName] = packageVersion
     delete packageJson.dependencies[packageName]
 
-    makeCaretRange(packageJson.dependencies, 'react')
-    makeCaretRange(packageJson.dependencies, 'react-dom')
-
     fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2))
 }
 
@@ -253,36 +245,329 @@ const isSafeToCreateProjectIn = (root) => {
 }
 
 
+const initialize = (appPath, appName, packageName, verbose, originalDir, useAdditionalPackages, ts) => {
 
-const run = (root, appName, version, verbose, originalDirectory, template) => {
-    const packageToInstall = getInstallPackage(version)
-    const allDependencies = ['react', 'react-dom', packageToInstall]
+    console.log(chalk.magenta('initializing...'))
 
-    console.log(chalk.bgMagenta('installing, may take awhile...'))
+    const ownPackage = require(path.join (__dirname, appName, 'package.json')).name
+    const ownPath = path.join(appPath, 'node_modules', packageName)
 
-    getPackageName(packageToInstall).then((packageName) => {
-        console.log('installing react, react-dom && ' + packageName)
+    const types = [
+        '@types/history',
+        '@types/jest',
+        '@types/jquery',
+        '@types/node',
+        '@types/react',
+        '@types/react-dom',
+        '@types/react-router-redux',
+        '@types/redux-logger',
+        '@types/redux-promise-middleware'
+    ]
 
-        return install(allDependencies, verbose).then(
-            ()=> {
-                return packageName})
-    }).then((packageName) => {
-        checkNodeVersion(packageName)
-        fixDependencies(packageName)
+    const additionalPackages = [
+        'axios',
+        'date-input-polyfill',
+        'express',
+        'history',
+        'jquery',
+        'moment',
+        'react',
+        'react-dom',
+        'react-draggable',
+        'react-redux',
+        'react-router',
+        'react-router-dom',
+        'react-router-redux',
+        'redux',
+        'redux-logger',
+        'redux-promise-middleware',
+        'redux-thunk'
+    ]
 
-        const scriptsPath = path.resolve(
-            process.cwd(),
-            'node_modules',
-            packageName,
-            'scripts',
-            'initialize.js'
-            // cwd/node_modules/create-express-react-template/scripts/init.js
+    const tsconfig =    {
+        "compilerOptions": {
+            "outDir": "dist",
+            "module": "esnext",
+            "target": "es6",
+            "lib": ["es6", "dom"],
+            "sourceMap": true,
+            "allowJs": true,
+            "jsx": "react",
+            "moduleResolution": "node",
+            "rootDir": "src"
+        },
+        "exclude": [
+            "node_modules",
+            "build",
+            "scripts",
+            "acceptance-tests",
+            "jest",
+        ]
+    }
+
+    const tsconfigTest = {
+        "extends": "./tsconfig.json",
+        "compilerOptions": {
+            "module": "commonjs"
+        }
+    }
+
+    const tslint = {
+        "extends": ["tslint-react"],
+        "rules": {
+            "align": [
+                true,
+                "parameters",
+                "arguments",
+                "statements"
+            ],
+            "ban": false,
+            "class-name": true,
+            "comment-format": [
+                true,
+                "check-space"
+            ],
+            "curly": true,
+            "eofline": false,
+            "forin": true,
+            "indent": [ true, "spaces" ],
+            "interface-name": [true, "never-prefix"],
+            "jsdoc-format": true,
+            "jsx-no-lambda": false,
+            "jsx-no-multiline-js": false,
+            "label-position": true,
+            "max-line-length": [ true, 120 ],
+            "member-ordering": [
+                true,
+                "public-before-private",
+                "static-before-instance",
+                "variables-before-functions"
+            ],
+            "no-any": false,
+            "no-arg": true,
+            "no-bitwise": true,
+            "no-consecutive-blank-lines": true,
+            "no-construct": true,
+            "no-debugger": true,
+            "no-duplicate-variable": true,
+            "no-empty": true,
+            "no-eval": true,
+            "no-shadowed-variable": false,
+            "no-string-literal": true,
+            "no-switch-case-fall-through": true,
+            "no-trailing-whitespace": false,
+            "no-unused-expression": true,
+            "no-use-before-declare": true,
+            "one-line": [
+                true,
+                "check-catch",
+                "check-else",
+                "check-open-brace",
+                "check-whitespace"
+            ],
+            "quotemark": [true, "single", "jsx-double"],
+            "semicolon": [true, "never", "ignore-interfaces"],
+            "switch-default": true,
+
+            "trailing-comma": false,
+
+            "triple-equals": [ true, "allow-null-check" ],
+            "typedef": [
+                true,
+                "parameter",
+                "property-declaration"
+            ],
+            "typedef-whitespace": [
+                true,
+                {
+                    "call-signature": "nospace",
+                    "index-signature": "nospace",
+                    "parameter": "nospace",
+                    "property-declaration": "nospace",
+                    "variable-declaration": "nospace"
+                }
+            ],
+            "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
+            "whitespace": [
+                true,
+                "check-branch",
+                "check-decl",
+                "check-module",
+                "check-operator",
+                "check-separator",
+                "check-type",
+                "check-typecast"
+            ]
+        }
+    }
+
+
+    //command line command:
+    // npm install --save [--verbose]
+    const command = 'npm'
+    let saveArgs = ['install', '--save', verbose && '--verbose'].filter(e => e)
+    let saveDevArgs = ['install', '--save-dev', verbose && '--verbose'].filter(e => e)
+
+    let packagesToSave = []
+    let packagesToSaveDev = []
+
+    if (useAdditionalPackages) {
+        for (let i = 0; i < additionalPackages.length; i++){
+            packagesToSave.push(additionalPackages[i])
+        }
+    }
+
+    if (ts) {
+        for (let i = 0; i < types.length; i++){
+            packagesToSave.push(types[i])
+        }
+
+        // create tsconfig.json, tsconfig.test.json, tslint.json
+        fs.writeFileSync(
+            path.join(appPath, 'tsconfig.json'),
+            JSON.stringify(tsconfig, null, 2)
+        )
+        fs.writeFileSync(
+            path.join(appPath, 'tsconfig.test.json'),
+            JSON.stringify(tsconfigTest, null, 2)
+        )
+        fs.writeFileSync(
+            path.join(appPath, 'tslint.json'),
+            JSON.stringify(tslint, null, 2)
         )
 
-        const init = require(scriptsPath)
-        init(root, appName, verbose, originalDirectory, template)
-    })
-        .catch((reason) => {
+    }
+
+    //runs command line commands
+    const runCommand = (command, args, type) => {
+        const run = spawn.sync(command, args, type)
+        if (run.status !== 0) {
+            console.error(`\' ${command} ${args}\' failed`)
+        }
+    }
+
+
+    //if a readmeExits, change its name and create new one in appPath
+    const readmeExists = fs.existsSync(path.join(appPath, 'README.md'))
+    if (readmeExists) {
+        fs.renameSync(path.join(appPath, 'README.md'), path.join(appPath, 'OLDREADME.md'))
+    }
+
+    //finds the template directory
+    const templatePath = path.join(ownPath)
+
+    console.log(chalk.bgCyan('ownPath:'), ownPath)
+    console.log(chalk.bgCyan('appPath:'), appPath)
+    console.log(chalk.bgCyan('templatePath:'), templatePath)
+
+    const templatePackageJSON = require(path.join(templatePath, 'package.json'))
+
+    templatePackageJSON.name = appName
+    templatePackageJSON.version = '0.0.0'
+    templatePackageJSON.private = true
+    templatePackageJSON.description = 'some ' + appName + ' description'
+    templatePackageJSON.license = templatePackageJSON.license || 'BSD'
+    templatePackageJSON.dependencies = templatePackageJSON.dependencies || {}
+    templatePackageJSON.devDependencies = templatePackageJSON.devDependencies || {}
+
+    //copies template directory to appPath
+    // the template/package.json is copied over.
+    // this means that scripts, babel, etc will be copied over as well.
+    if (fs.existsSync(templatePath)) {
+        fs.copySync(templatePath, appPath)
+    } else {
+        console.error(chalk.bgRed.white(`Cannot find template`))
+    }
+
+    // overwrite the templatePackage to package.json in appPath to update the name, version, etc
+    fs.writeFileSync(
+        path.join(appPath, 'package.json'),
+        JSON.stringify(templatePackageJSON, null, 2)
+    )
+
+    if (templatePackageJSON.dependencies !== {} || templatePackageJSON.devDependencies !== {}) {
+        if (templatePackageJSON.dependencies !== {}) {
+            packagesToSave.push.apply(Object.keys(templatePackageJSON.dependencies))
+        }
+
+        if (templatePackageJSON.devDependencies !== {}) {
+            packagesToSaveDev.push.apply(Object.keys(templatePackageJSON.devDependencies))
+        }
+    }
+
+    //run npm install after the template has been copied over to prevent template/package.json from being overwritten
+    runCommand(command, saveArgs.concat(packagesToSave), {stdio: 'inherit'})
+    runCommand(command, saveDevArgs.concat(packagesToSaveDev), {stdio: 'inherit'})
+
+
+    //rename .gitignore because npm has renamed it .npmignore
+    // See: https://github.com/npm/npm/issues/1862
+    fs.move(
+        path.join(appPath, '.npmignore'),
+        path.join(appPath, '.gitignore'),
+        [],
+        err => {
+            if (err) {
+                if (err.code === 'EEXIST') {
+                    const currentgitignore = fs.readFileSync(path.join(appPath, '.gitignore'))
+                    fs.appendFileSync(path.join(appPath, '.gitignore'), currentgitignore)
+                    fs.unlinkSync(path.join(appPath, '.gitignore'))
+                } else if (err.code === 'ENOENT') {
+                    return
+                } else {
+                    throw err
+                }
+
+            }
+        }
+    )
+
+    let cdpath
+    if (originalDir && path.join(originalDir, appName) === appPath) {
+        cdpath = appName
+    } else {
+        cdpath = appPath
+    }
+
+    /*SUCCESS FUNCTION*/
+    console.log()
+    console.log(chalk.bgCyan('***************************************************************'))
+    console.log(chalk.cyan(`SUCCESS!`))
+    console.log(chalk.cyan(`your react-express-template has been created at ${appName}`))
+    console.log()
+    console.log(chalk.cyan(` cd ${cdpath}`))
+    if (readmeExists) {
+        console.log()
+        console.log(chalk.magenta('your original README.md was renamed to OLDREADME.md'))
+    }
+    console.log()
+    console.log(chalk.bgCyan('***********************************************'))
+}
+
+
+
+const run = (root, appName, version, verbose, originalDir, noAdditionalPackages, ts) => {
+    const packageToInstall = getInstallPackage(version, ts)
+    const packageDependencies = [packageToInstall]
+
+    console.log(chalk.magenta('beginning install, it may take awhile...'))
+
+    getPackageName(packageToInstall)
+        .then((packageName) => {
+            console.log('installing ' + packageName + ' in ' + process.cwd() )
+            return install(packageDependencies, verbose)
+                .then(
+                    ()=> {
+                        return packageName})
+        })
+        .then((packageName) => {
+            checkNodeVersion(packageName)
+            fixDependencies(packageName)
+
+            initialize(root, appName, packageName, verbose, originalDir, noAdditionalPackages, ts)
+        })
+        .catch((
+            reason) => {
             console.log(chalk.bgRed('abort'))
             if (reason.command){
                 console.log(reason.command + 'has failed')
@@ -341,7 +626,7 @@ const install = (dependencies, verbose) => {
     })
 }
 
-const createApp = (name, verbose, version, template) => {
+const createApp = (name, verbose, version, noAdditionalPackages, ts) => {
     const root = path.resolve(name)
     const appName = path.basename(root)
 
@@ -352,7 +637,7 @@ const createApp = (name, verbose, version, template) => {
         process.exit(1)
     }
 
-    console.log(chalk.bgMagenta('creating new app'))
+    console.log(chalk.magenta('creating new app'))
 
     const packageJson = {
         name: appName,
@@ -368,10 +653,11 @@ const createApp = (name, verbose, version, template) => {
     const originalDirectory = process.cwd()
     process.chdir(root)
 
-    run(root, appName, version, verbose, originalDirectory, template)
+    run(root, appName, version, verbose, originalDirectory, noAdditionalPackages, ts)
 }
 
 
 
 
-createApp(projectName, program.verbose, program.scriptsVersion, hiddenProgram.internalTestingTemplate)
+createApp(projectName, templateCreator.verbose, templateCreator.scriptsVersion, templateCreator.noAdditionalPackages, templateCreator.ts)
+
