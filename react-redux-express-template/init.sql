@@ -10,5 +10,5 @@ CREATE TABLE nosql_table (
 
 CREATE TABLE sql_table (
     id SERIAL PRIMARY KEY,
-    table_data VARCHAR(30)
+    table_data REAL
 );

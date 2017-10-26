@@ -6,9 +6,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./src/routes/index');
-var users = require('./src/routes/counter');
+var counter = require('./src/routes/counter');
+var storedCounter = require('./src/routes/storedCounter');
 
 var app = express();
+var validate = require('express-validation');
+
+// global Joi/express-validation config
+validate.options({
+    contextRequest: true, // allow access to path params
+    allowUnknownBody: false // prevent unknown json in payloads,
+})
 
 app.set('views', __dirname + '/web/public/src');
 app.set('view engine', 'jsx');
@@ -22,28 +30,32 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../web/public')));
 
-app.use('/counter', users);
+app.use('/counter', counter);
+app.use('/storedCounter', storedCounter);
 
 app.get('*', (req, res) => {
     res.sendfile('/web/public/index.html', {'root': __dirname + '/../'});
 })
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
     // render the error page
     res.status(err.status || 500);
-    res.send(err.message);
+    res.send({
+        message: err.message,
+        error: err
+    });
 });
 
 module.exports = app;

@@ -7,7 +7,7 @@ const humps = require('humps');
 const pgp = require("pg-promise")(options);
 module.exports = pgp({
     host: 'localhost',
-    database: 'sapiens_wizard',
+    database: 'postgres_db',
     poolSize: 25 // max number of clients in pool
 })
 
