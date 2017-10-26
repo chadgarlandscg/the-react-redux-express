@@ -1,17 +1,8 @@
 {
   "name": "react-redux-express-template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "scripts for react redux express app generator",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "chad garland",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/chadgarlandscg/chadgarlandscg-express-react-template"
-  },
   "scripts": {
     "start": "npm run web & npm run server",
     "server": "supervisor ./server/bin/www",
@@ -19,6 +10,12 @@
     "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js",
     "prod": "npm run build | uglifyjs -mc warnings=false > web/public/bundle.js",
     "init": "sh init.sh"
+  },
+  "author": "chad garland",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chadgarlandscg/chadgarlandscg-express-react-template"
   },
   "babel": {
     "presets": [

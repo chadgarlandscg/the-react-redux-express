@@ -2,42 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1ba5a600-9d06-4159-8cbc-c02d117dba60" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/package-lock.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/scripts/initialize.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/package-lock.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/package.json" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/.idea/modules.xml" afterPath="$PROJECT_DIR$/react-redux-express-template/.idea/modules.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/.idea/react-redux-express-scripts.iml" afterPath="$PROJECT_DIR$/react-redux-express-template/.idea/react-redux-express-scripts.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/.idea/workspace.xml" afterPath="$PROJECT_DIR$/react-redux-express-template/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/package.json" afterPath="$PROJECT_DIR$/react-redux-express-template/package.json" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/init.sh" afterPath="$PROJECT_DIR$/react-redux-express-template/init.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/init.sql" afterPath="$PROJECT_DIR$/react-redux-express-template/init.sql" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/server/app.js" afterPath="$PROJECT_DIR$/react-redux-express-template/server/app.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/server/bin/www" afterPath="$PROJECT_DIR$/react-redux-express-template/server/bin/www" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/server/db.js" afterPath="$PROJECT_DIR$/react-redux-express-template/server/db.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/server/src/daos/noSqlDao.js" afterPath="$PROJECT_DIR$/react-redux-express-template/server/src/daos/noSqlDao.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/server/src/daos/sqlDao.js" afterPath="$PROJECT_DIR$/react-redux-express-template/server/src/daos/sqlDao.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/server/src/routes/counter.js" afterPath="$PROJECT_DIR$/react-redux-express-template/server/src/routes/counter.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/server/src/routes/index.js" afterPath="$PROJECT_DIR$/react-redux-express-template/server/src/routes/index.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/public/App.css" afterPath="$PROJECT_DIR$/react-redux-express-template/web/public/App.css" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/public/favicon.ico" afterPath="$PROJECT_DIR$/react-redux-express-template/web/public/favicon.ico" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/public/index.css" afterPath="$PROJECT_DIR$/react-redux-express-template/web/public/index.css" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/public/index.html" afterPath="$PROJECT_DIR$/react-redux-express-template/web/public/index.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/public/logo.svg" afterPath="$PROJECT_DIR$/react-redux-express-template/web/public/logo.svg" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/public/manifest.json" afterPath="$PROJECT_DIR$/react-redux-express-template/web/public/manifest.json" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/bundle.js" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/bundle.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/index.js" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/index.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/react/App.js" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/react/App.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/react/App.test.js" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/react/App.test.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/react/Table.js" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/react/Table.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/redux/actions/actionTypes.ts" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/redux/actions/actionTypes.ts" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/redux/actions/index.ts" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/redux/actions/index.ts" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/redux/reducers/index.ts" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/redux/reducers/index.ts" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/redux/store/history.ts" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/redux/store/history.ts" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/redux/store/store.ts" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/redux/store/store.ts" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/react-redux-express-scripts/template/web/src/registerServiceWorker.js" afterPath="$PROJECT_DIR$/react-redux-express-template/web/src/registerServiceWorker.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/create-react-redux-express-app.js" afterPath="$PROJECT_DIR$/create-react-redux-express-app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/react-redux-express-template/package.json" afterPath="$PROJECT_DIR$/react-redux-express-template/package.json" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -61,7 +26,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="create-react-redux-express-app.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="create-react-redux-express-app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/create-react-redux-express-app.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="5636">
@@ -113,7 +78,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/react-redux-express-template/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
@@ -296,12 +261,12 @@
       <updated>1508691376768</updated>
       <workItem from="1508691378006" duration="20671000" />
       <workItem from="1508899553243" duration="1510000" />
-      <workItem from="1508901792954" duration="9143000" />
+      <workItem from="1508901792954" duration="9318000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31324000" />
+    <option name="totallyTimeSpent" value="31499000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="187" y="61" width="1562" height="935" extended-state="0" />
@@ -490,14 +455,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/react-redux-express-template/template/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -506,18 +463,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/react-redux-express-template/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="15" lean-forward="false" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/create-react-redux-express-app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5636">
           <caret line="502" column="23" lean-forward="true" selection-start-line="502" selection-start-column="23" selection-end-line="502" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/react-redux-express-template/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="15" lean-forward="false" selection-start-line="2" selection-start-column="15" selection-end-line="2" selection-end-column="15" />
           <folding />
         </state>
       </provider>
