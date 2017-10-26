@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Table from './Table';
-import ConnectedSample from '/.ConnectedSample'
+import ConnectedSample from './ConnectedSample'
 
 class App extends Component {
     render() {
