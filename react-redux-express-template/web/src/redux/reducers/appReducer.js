@@ -1,8 +1,9 @@
 import { appState } from '../store/templates/appState'
 
 import {
-    GENERIC_ERROR,
-    SOME_ACTION, UPDATE_COUNTER, UPDATE_COUNTER_CHANGE_FIELD, UPDATE_COUNTER_FULFILLED, UPDATE_COUNTER_REJECTED
+    GENERIC_ERROR, GET_COUNTER_FULFILLED, GET_COUNTER_PENDING, GET_COUNTER_REJECTED,
+    SOME_ACTION, UPDATE_COUNTER, UPDATE_COUNTER_CHANGE_FIELD, UPDATE_COUNTER_FULFILLED, UPDATE_COUNTER_PENDING,
+    UPDATE_COUNTER_REJECTED
 } from '../actions/actionTypes'
 
 export default (state = appState, action) => {
@@ -19,12 +20,15 @@ export default (state = appState, action) => {
                 counterChangeField: action.payload
             }
         }
-        case UPDATE_COUNTER: {
+        case GET_COUNTER_PENDING:
+        case UPDATE_COUNTER_PENDING: {
             return {
                 ...state,
                 awaitingResponse: true
             }
         }
+        case GENERIC_ERROR:
+        case GET_COUNTER_REJECTED:
         case UPDATE_COUNTER_REJECTED: {
             return {
                 ...state,
@@ -32,17 +36,12 @@ export default (state = appState, action) => {
                 awaitingResponse: false
             }
         }
+        case GET_COUNTER_FULFILLED:
         case UPDATE_COUNTER_FULFILLED: {
             return {
                 ...state,
                 counter: action.payload,
                 awaitingResponse: false
-            }
-        }
-        case GENERIC_ERROR: {
-            return {
-                ...state,
-                error: action.payload
             }
         }
         default: {
