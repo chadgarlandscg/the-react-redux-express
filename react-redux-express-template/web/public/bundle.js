@@ -28515,6 +28515,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
         },
         updateCounter: function updateCounter(value, id) {
             return dispatch((0, _index.updateCounter)(value, id));
+        },
+        getCounter: function getCounter(id) {
+            return dispatch((0, _index.getCounter)(id));
         }
     };
 };
@@ -28527,6 +28530,9 @@ exports.default = ConnectedSample;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -28538,62 +28544,91 @@ var _appState = require('../redux/store/templates/appState');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var Sample = function Sample(props) {
-    return React.createElement(
-        'div',
-        null,
-        React.createElement(
-            _reactRouter.Switch,
-            null,
-            React.createElement(_reactRouter.Route, {
-                exact: true,
-                path: '/sample',
-                render: function render() {
-                    return React.createElement(
-                        'div',
-                        null,
-                        React.createElement(
-                            'h1',
-                            null,
-                            props.appState.sample
-                        ),
-                        React.createElement(
-                            'button',
-                            {
-                                onClick: function onClick() {
-                                    return props.updateSampleText(props.appState.sample.includes('test') ? _appState.appState.sample : _appState.appState.sample + ' test ');
-                                }
-                            },
-                            'Test'
-                        ),
-                        React.createElement('input', {
-                            type: 'number',
-                            value: props.appState.counterChangeField,
-                            onChange: function onChange(element) {
-                                props.updateCounterChangeField(element.target.value);
-                            }
-                        }),
-                        React.createElement(
-                            'label',
-                            null,
-                            'Current counter value: ',
-                            props.appState.counter.value
-                        ),
-                        React.createElement(
-                            'button',
-                            {
-                                onClick: function onClick() {
-                                    return props.updateCounter(props.appState.counterChangeField, props.appState.counter.id);
-                                }
-                            },
-                            'Save'
-                        )
-                    );
-                }
-            })
-        )
-    );
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Sample = function (_React$Component) {
+    _inherits(Sample, _React$Component);
+
+    function Sample() {
+        _classCallCheck(this, Sample);
+
+        return _possibleConstructorReturn(this, (Sample.__proto__ || Object.getPrototypeOf(Sample)).apply(this, arguments));
+    }
+
+    _createClass(Sample, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.props.getCounter(this.props.appState.counter.id);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return React.createElement(
+                'div',
+                null,
+                React.createElement(
+                    _reactRouter.Switch,
+                    null,
+                    React.createElement(_reactRouter.Route, {
+                        exact: true,
+                        path: '/sample',
+                        render: function render() {
+                            return React.createElement(
+                                'div',
+                                null,
+                                React.createElement(
+                                    'h1',
+                                    null,
+                                    _this2.props.appState.sample
+                                ),
+                                React.createElement(
+                                    'button',
+                                    {
+                                        onClick: function onClick() {
+                                            return _this2.props.updateSampleText(_this2.props.appState.sample.includes('test') ? _appState.appState.sample : _appState.appState.sample + ' test ');
+                                        }
+                                    },
+                                    'Test'
+                                ),
+                                React.createElement('input', {
+                                    type: 'number',
+                                    value: _this2.props.appState.counterChangeField,
+                                    onChange: function onChange(element) {
+                                        _this2.props.updateCounterChangeField(element.target.value);
+                                    }
+                                }),
+                                React.createElement(
+                                    'label',
+                                    null,
+                                    'Current counter value: ',
+                                    _this2.props.appState.counter.value
+                                ),
+                                React.createElement(
+                                    'button',
+                                    {
+                                        onClick: function onClick() {
+                                            return _this2.props.updateCounter(_this2.props.appState.counterChangeField, _this2.props.appState.counter.id);
+                                        }
+                                    },
+                                    'Save'
+                                )
+                            );
+                        }
+                    })
+                )
+            );
+        }
+    }]);
+
+    return Sample;
+}(React.Component);
+
 exports.default = Sample;
 
 },{"../redux/store/templates/appState":154,"react":125,"react-router":119}],147:[function(require,module,exports){
@@ -28738,9 +28773,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 var SOME_ACTION = exports.SOME_ACTION = 'SOME_ACTION';
 var UPDATE_COUNTER_CHANGE_FIELD = exports.UPDATE_COUNTER_CHANGE_FIELD = 'UPDATE_COUNTER_CHANGE_FIELD';
-var UPDATE_COUNTER = exports.UPDATE_COUNTER = 'UPDATE_COUNTER';
+var UPDATE_COUNTER_PENDING = exports.UPDATE_COUNTER_PENDING = 'UPDATE_COUNTER_PENDING';
 var UPDATE_COUNTER_REJECTED = exports.UPDATE_COUNTER_REJECTED = "UPDATE_COUNTER_REJECTED";
 var UPDATE_COUNTER_FULFILLED = exports.UPDATE_COUNTER_FULFILLED = "UPDATE_COUNTER_FULFILLED";
+var GET_COUNTER_PENDING = exports.GET_COUNTER_PENDING = 'GET_COUNTER_PENDING';
+var GET_COUNTER_REJECTED = exports.GET_COUNTER_REJECTED = "GET_COUNTER_REJECTED";
+var GET_COUNTER_FULFILLED = exports.GET_COUNTER_FULFILLED = "GET_COUNTER_FULFILLED";
 var GENERIC_ERROR = exports.GENERIC_ERROR = 'GENERIC_ERROR';
 
 },{}],149:[function(require,module,exports){
@@ -28749,7 +28787,7 @@ var GENERIC_ERROR = exports.GENERIC_ERROR = 'GENERIC_ERROR';
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.updateCounter = exports.updateCounterRejected = exports.updateCounterFulfilled = exports.updateCounterPending = exports.updateCounterChangeField = exports.someAction = undefined;
+exports.updateCounter = exports.getCounter = exports.getCounterRejected = exports.getCounterFulfilled = exports.getCounterPending = exports.updateCounterRejected = exports.updateCounterFulfilled = exports.updateCounterPending = exports.updateCounterChangeField = exports.someAction = undefined;
 
 var _actionTypes = require('./actionTypes');
 
@@ -28768,7 +28806,7 @@ var updateCounterChangeField = exports.updateCounterChangeField = function updat
 };
 
 var updateCounterPending = exports.updateCounterPending = function updateCounterPending() {
-    return { type: _actionTypes.UPDATE_COUNTER };
+    return { type: _actionTypes.UPDATE_COUNTER_PENDING };
 };
 
 var updateCounterFulfilled = exports.updateCounterFulfilled = function updateCounterFulfilled(updatedCounter) {
@@ -28780,6 +28818,32 @@ var updateCounterFulfilled = exports.updateCounterFulfilled = function updateCou
 
 var updateCounterRejected = exports.updateCounterRejected = function updateCounterRejected(error) {
     return { type: _actionTypes.UPDATE_COUNTER_REJECTED, payload: error };
+};
+
+var getCounterPending = exports.getCounterPending = function getCounterPending() {
+    return { type: _actionTypes.GET_COUNTER_PENDING };
+};
+
+var getCounterFulfilled = exports.getCounterFulfilled = function getCounterFulfilled(counter) {
+    return { type: _actionTypes.GET_COUNTER_FULFILLED, payload: {
+            id: counter.id,
+            value: counter.tableData
+        } };
+};
+
+var getCounterRejected = exports.getCounterRejected = function getCounterRejected(error) {
+    return { type: _actionTypes.GET_COUNTER_REJECTED, payload: error };
+};
+
+var getCounter = exports.getCounter = function getCounter(id) {
+    return function (dispatch) {
+        dispatch(getCounterPending());
+        return _axios2.default.get('/storedCounter/' + id).then(function (response) {
+            dispatch(getCounterFulfilled(response.data));
+        }).catch(function (error) {
+            dispatch(getCounterRejected(error));
+        });
+    };
 };
 
 var updateCounter = exports.updateCounter = function updateCounter(val, id) {
@@ -28823,12 +28887,15 @@ exports.default = function () {
                     counterChangeField: action.payload
                 });
             }
-        case _actionTypes.UPDATE_COUNTER:
+        case _actionTypes.GET_COUNTER_PENDING:
+        case _actionTypes.UPDATE_COUNTER_PENDING:
             {
                 return _extends({}, state, {
                     awaitingResponse: true
                 });
             }
+        case _actionTypes.GENERIC_ERROR:
+        case _actionTypes.GET_COUNTER_REJECTED:
         case _actionTypes.UPDATE_COUNTER_REJECTED:
             {
                 return _extends({}, state, {
@@ -28836,17 +28903,12 @@ exports.default = function () {
                     awaitingResponse: false
                 });
             }
+        case _actionTypes.GET_COUNTER_FULFILLED:
         case _actionTypes.UPDATE_COUNTER_FULFILLED:
             {
                 return _extends({}, state, {
                     counter: action.payload,
                     awaitingResponse: false
-                });
-            }
-        case _actionTypes.GENERIC_ERROR:
-            {
-                return _extends({}, state, {
-                    error: action.payload
                 });
             }
         default:
