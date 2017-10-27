@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const storedCounterService = require('../services/storedCounter');
+// const storedCounterService = require('../services/storedCounter');
+const storedCounterService = require('../services/storedCounter_bookshelf');
 const validation = require('../validation/storedCounter');
 var validate = require('express-validation');
 
