@@ -1,6 +1,6 @@
 {
   "name": "react-redux-express-template",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "scripts for react redux express app generator",
   "main": "index.js",
   "scripts": {
