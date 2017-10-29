@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 var index = require('./src/routes/index');
 var counter = require('./src/routes/counter');
 var storedCounter = require('./src/routes/storedCounter');
+var appUser = require('./src/routes/appUser');
+
+require('dotenv').config()
 
 var app = express();
 var validate = require('express-validation');
@@ -32,6 +35,11 @@ app.use(express.static(path.join(__dirname, '../web/public')));
 
 app.use('/counter', counter);
 app.use('/storedCounter', storedCounter);
+app.use('/appUser', appUser)
+
+app.get('/signIn', (req, res) => {
+    res.sendFile('/web/public/googleAuth.html', {'root': __dirname + '/../'});
+})
 
 app.get('*', (req, res) => {
     res.sendFile('/web/public/index.html', {'root': __dirname + '/../'});
