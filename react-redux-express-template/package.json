@@ -7,7 +7,8 @@
     "start": "npm run web & npm run server",
     "server": "supervisor ./server/bin/www",
     "inspect": "node --inspect ./server/bin/www",
-    "web": "watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js -v",
+    "web": "npm run sass && watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js -v",
+    "sass": "sass --watch web/src/sass/main.scss:web/public/main.css",
     "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js",
     "prod": "npm run build | uglifyjs -mc warnings=false > web/public/bundle.js",
     "init": "sh init.sh"

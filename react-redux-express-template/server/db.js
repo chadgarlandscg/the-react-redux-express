@@ -6,9 +6,9 @@ const options = {
 const humps = require('humps');
 const pgp = require("pg-promise")(options);
 module.exports = pgp({
-    host: 'localhost',
-    database: 'postgres_db',
-    poolSize: 25 // max number of clients in pool
+    host: process.env.DB_HOST,
+    database: process.env.DB,
+    poolSize: process.env.POOL_SIZE // max number of clients in pool
 })
 
 function camelizeColumnNames(data) {
