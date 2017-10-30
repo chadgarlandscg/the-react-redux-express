@@ -28398,14 +28398,12 @@ _reactDom2.default.render(_react2.default.createElement(
 ), document.getElementById('root'));
 (0, _registerServiceWorker2.default)();
 
-},{"./react/App":144,"./redux/store/history":152,"./redux/store/store":153,"./registerServiceWorker":155,"date-input-polyfill":27,"react":125,"react-dom":76,"react-redux":86,"react-router":119,"react-router-redux":108}],144:[function(require,module,exports){
+},{"./react/App":144,"./redux/store/history":153,"./redux/store/store":154,"./registerServiceWorker":156,"date-input-polyfill":27,"react":125,"react-dom":76,"react-redux":86,"react-router":119,"react-router-redux":108}],144:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
@@ -28415,71 +28413,50 @@ var _Table = require('./Table');
 
 var _Table2 = _interopRequireDefault(_Table);
 
+var _Welcome = require('./Welcome');
+
+var _Welcome2 = _interopRequireDefault(_Welcome);
+
+var _reactRouter = require('react-router');
+
 var _ConnectedSample = require('./ConnectedSample');
 
 var _ConnectedSample2 = _interopRequireDefault(_ConnectedSample);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var App = function (_Component) {
-    _inherits(App, _Component);
-
-    function App() {
-        _classCallCheck(this, App);
-
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
-    }
-
-    _createClass(App, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                'div',
-                { className: 'App' },
-                _react2.default.createElement(
-                    'header',
-                    { className: 'App-header' },
-                    _react2.default.createElement('img', { src: 'logo.svg', className: 'App-logo', alt: 'logo' }),
-                    _react2.default.createElement(
-                        'h1',
-                        { className: 'App-title' },
-                        'Welcome to React'
-                    )
-                ),
-                _react2.default.createElement(
-                    'p',
-                    { className: 'App-intro' },
-                    'To get started, edit ',
-                    _react2.default.createElement(
-                        'code',
-                        null,
-                        'src/App.js'
-                    ),
-                    ' and save to reload.'
-                ),
-                _react2.default.createElement(
-                    'h2',
-                    null,
-                    'Test with Brandy!'
-                ),
-                _react2.default.createElement(_ConnectedSample2.default, null),
-                _react2.default.createElement(_Table2.default, null)
-            );
-        }
-    }]);
-
-    return App;
-}(_react.Component);
+var App = function App(props) {
+    return _react2.default.createElement(
+        'div',
+        { className: 'App' },
+        _react2.default.createElement(
+            _reactRouter.Switch,
+            null,
+            _react2.default.createElement(_reactRouter.Route, {
+                exact: true, path: '/',
+                render: function render() {
+                    return _react2.default.createElement(_Welcome2.default, null);
+                }
+            }),
+            _react2.default.createElement(_reactRouter.Route, {
+                path: '/sample',
+                render: function render() {
+                    return _react2.default.createElement(_ConnectedSample2.default, null);
+                }
+            }),
+            _react2.default.createElement(_reactRouter.Route, {
+                path: '/table',
+                render: function render() {
+                    return _react2.default.createElement(_Table2.default, null);
+                }
+            })
+        )
+    );
+};
 
 exports.default = App;
 
-},{"./ConnectedSample":145,"./Table":147,"react":125}],145:[function(require,module,exports){
+},{"./ConnectedSample":145,"./Table":147,"./Welcome":148,"react":125,"react-router":119}],145:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28524,7 +28501,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
 var ConnectedSample = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Sample2.default));
 exports.default = ConnectedSample;
 
-},{"../redux/actions/index":149,"./Sample":146,"react-redux":86,"react-router-dom":103,"react-router-redux":108}],146:[function(require,module,exports){
+},{"../redux/actions/index":150,"./Sample":146,"react-redux":86,"react-router-dom":103,"react-router-redux":108}],146:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28537,8 +28514,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = require('react');
 
 var React = _interopRequireWildcard(_react);
-
-var _reactRouter = require('react-router');
 
 var _appState = require('../redux/store/templates/appState');
 
@@ -28573,54 +28548,40 @@ var Sample = function (_React$Component) {
                 'div',
                 null,
                 React.createElement(
-                    _reactRouter.Switch,
+                    'h1',
                     null,
-                    React.createElement(_reactRouter.Route, {
-                        exact: true,
-                        path: '/sample',
-                        render: function render() {
-                            return React.createElement(
-                                'div',
-                                null,
-                                React.createElement(
-                                    'h1',
-                                    null,
-                                    _this2.props.appState.sample
-                                ),
-                                React.createElement(
-                                    'button',
-                                    {
-                                        onClick: function onClick() {
-                                            return _this2.props.updateSampleText(_this2.props.appState.sample.includes('test') ? _appState.appState.sample : _appState.appState.sample + ' test ');
-                                        }
-                                    },
-                                    'Test'
-                                ),
-                                React.createElement('input', {
-                                    type: 'number',
-                                    value: _this2.props.appState.counterChangeField,
-                                    onChange: function onChange(element) {
-                                        _this2.props.updateCounterChangeField(element.target.value);
-                                    }
-                                }),
-                                React.createElement(
-                                    'label',
-                                    null,
-                                    'Current counter value: ',
-                                    _this2.props.appState.counter.value
-                                ),
-                                React.createElement(
-                                    'button',
-                                    {
-                                        onClick: function onClick() {
-                                            return _this2.props.updateCounter(_this2.props.appState.counterChangeField, _this2.props.appState.counter.id);
-                                        }
-                                    },
-                                    'Save'
-                                )
-                            );
+                    this.props.appState.sample
+                ),
+                React.createElement(
+                    'button',
+                    {
+                        onClick: function onClick() {
+                            return _this2.props.updateSampleText(_this2.props.appState.sample.includes('test') ? _appState.appState.sample : _appState.appState.sample + ' test ');
                         }
-                    })
+                    },
+                    'Test'
+                ),
+                React.createElement('input', {
+                    type: 'number',
+                    value: this.props.appState.counterChangeField,
+                    onChange: function onChange(element) {
+                        _this2.props.updateCounterChangeField(element.target.value);
+                    }
+                }),
+                React.createElement(
+                    'label',
+                    null,
+                    'Current counter value: ',
+                    this.props.appState.counter.value
+                ),
+                React.createElement(
+                    'button',
+                    {
+                        onClick: function onClick() {
+                            return _this2.props.updateCounter(_this2.props.appState.counterChangeField, _this2.props.appState.counter.id);
+                        }
+                    },
+                    'Save'
                 )
             );
         }
@@ -28631,7 +28592,7 @@ var Sample = function (_React$Component) {
 
 exports.default = Sample;
 
-},{"../redux/store/templates/appState":154,"react":125,"react-router":119}],147:[function(require,module,exports){
+},{"../redux/store/templates/appState":155,"react":125}],147:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28769,6 +28730,47 @@ exports.default = Table;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (props) {
+    return _react2.default.createElement(
+        'div',
+        { id: 'welcome' },
+        _react2.default.createElement(
+            'header',
+            { className: 'App-header' },
+            _react2.default.createElement('img', { src: 'logo.svg', className: 'App-logo', alt: 'logo' }),
+            _react2.default.createElement(
+                'h1',
+                { className: 'App-title' },
+                'Welcome to React'
+            )
+        ),
+        _react2.default.createElement(
+            'p',
+            { className: 'App-intro' },
+            'To get started, edit ',
+            _react2.default.createElement(
+                'code',
+                null,
+                'src/App.js'
+            ),
+            ' and save to reload.'
+        )
+    );
+};
+
+},{"react":125}],149:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var SOME_ACTION = exports.SOME_ACTION = 'SOME_ACTION';
@@ -28781,7 +28783,7 @@ var GET_COUNTER_REJECTED = exports.GET_COUNTER_REJECTED = "GET_COUNTER_REJECTED"
 var GET_COUNTER_FULFILLED = exports.GET_COUNTER_FULFILLED = "GET_COUNTER_FULFILLED";
 var GENERIC_ERROR = exports.GENERIC_ERROR = 'GENERIC_ERROR';
 
-},{}],149:[function(require,module,exports){
+},{}],150:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28857,7 +28859,7 @@ var updateCounter = exports.updateCounter = function updateCounter(val, id) {
     };
 };
 
-},{"./actionTypes":148,"axios":2}],150:[function(require,module,exports){
+},{"./actionTypes":149,"axios":2}],151:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28918,7 +28920,7 @@ exports.default = function () {
     }
 };
 
-},{"../actions/actionTypes":148,"../store/templates/appState":154}],151:[function(require,module,exports){
+},{"../actions/actionTypes":149,"../store/templates/appState":155}],152:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28940,7 +28942,7 @@ exports.default = (0, _redux.combineReducers)({
     appState: _appReducer2.default
 });
 
-},{"./appReducer":150,"react-router-redux":108,"redux":135}],152:[function(require,module,exports){
+},{"./appReducer":151,"react-router-redux":108,"redux":135}],153:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28957,7 +28959,7 @@ var history = (0, _createBrowserHistory2.default)();
 
 exports.default = history;
 
-},{"history/createBrowserHistory":49}],153:[function(require,module,exports){
+},{"history/createBrowserHistory":49}],154:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28995,7 +28997,7 @@ var middleware = (0, _redux.applyMiddleware)(routeMiddleware, (0, _reduxPromiseM
 
 exports.default = (0, _redux.createStore)(_index2.default, middleware);
 
-},{"../reducers/index":151,"./history":152,"react-router-redux":108,"redux":135,"redux-logger":126,"redux-promise-middleware":127,"redux-thunk":129}],154:[function(require,module,exports){
+},{"../reducers/index":152,"./history":153,"react-router-redux":108,"redux":135,"redux-logger":126,"redux-promise-middleware":127,"redux-thunk":129}],155:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -29012,7 +29014,7 @@ var appState = exports.appState = {
 
 };
 
-},{}],155:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 (function (process){
 'use strict';
 

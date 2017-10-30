@@ -1,6 +1,6 @@
 {
   "name": "react-redux-express-template",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "scripts for react redux express app generator",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "server": "supervisor ./server/bin/www",
     "inspect": "node --inspect ./server/bin/www",
     "web": "npm run sass && watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js -v",
-    "sass": "sass --watch web/src/sass/main.scss:web/public/main.css",
+    "sass": "sass --watch web/src/index.scss:web/public/index.css",
     "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js",
     "prod": "npm run build | uglifyjs -mc warnings=false > web/public/bundle.js",
     "init": "sh init.sh"
