@@ -4,12 +4,13 @@
   "description": "scripts for react redux express app generator",
   "main": "index.js",
   "scripts": {
-    "start": "npm run web & npm run server",
+    "start": "npm run web-script & npm run server",
     "server": "supervisor ./server/bin/www",
     "inspect": "node --inspect ./server/bin/www",
-    "web": "npm run sass && watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js -v",
+    "web": "npm run sass & watchify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] -t [ envify --NODE_ENV development ] web/src/index.js -o web/public/bundle.js -v",
+    "web-script": "npm run sass & node build.js",
     "sass": "sass --watch web/src/index.scss:web/public/index.css",
-    "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] web/src/index.js -o web/public/bundle.js",
+    "build": "browserify -t [ babelify --presets [ es2015 react babel-preset-stage-0 ] --plugins [ babel-plugin-transform-decorators-legacy ] ] -t [ envify --NODE_ENV development ] web/src/index.js -o web/public/bundle.js",
     "prod": "npm run build | uglifyjs -mc warnings=false > web/public/bundle.js",
     "init": "sh init.sh"
   },
@@ -52,6 +53,7 @@
     "react": "16.0.0",
     "react-dom": "16.0.0",
     "react-draggable": "3.0.3",
+    "react-google-login": "^3.0.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -67,6 +69,9 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.22.0",
-    "babelify": "^7.3.0"
+    "babelify": "^7.3.0",
+    "browserify": "^14.5.0",
+    "envify": "^4.1.0",
+    "watchify": "^3.9.0"
   }
 }
