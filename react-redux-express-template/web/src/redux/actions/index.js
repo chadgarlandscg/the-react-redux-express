@@ -1,5 +1,5 @@
 import {
-    SOME_ACTION, UPDATE_COUNTER_CHANGE_FIELD, UPDATE_COUNTER, GENERIC_ERROR,
+    SOME_ACTION, UPDATE_COUNTER_CHANGE_FIELD, GENERIC_ERROR,
     UPDATE_COUNTER_REJECTED, UPDATE_COUNTER_FULFILLED, GET_COUNTER_PENDING, GET_COUNTER_FULFILLED, GET_COUNTER_REJECTED,
     UPDATE_COUNTER_PENDING, CREATE_COUNTER_FULFILLED, CREATE_COUNTER_PENDING, CREATE_COUNTER_REJECTED, LOGIN_FULFILLED, LOGIN_PENDING, LOGIN_REJECTED
 } from './actionTypes'
@@ -21,6 +21,7 @@ export const createCounterPending = () => {
 export const createCounterFulfilled = (newCounter) => {
     return ({type: CREATE_COUNTER_FULFILLED, payload: {
         id: newCounter.id,
+        appUserId: newCounter.appUserId,
         value: newCounter.tableData
     }})
 }
@@ -36,6 +37,7 @@ export const updateCounterPending = () => {
 export const updateCounterFulfilled = (updatedCounter) => {
     return ({type: UPDATE_COUNTER_FULFILLED, payload: {
         id: updatedCounter.id,
+        appUserId: updatedCounter.appUserId,
         value: updatedCounter.tableData
     }})
 }
@@ -51,6 +53,7 @@ export const getCounterPending = () => {
 export const getCounterFulfilled = (counter) => {
     return ({type: GET_COUNTER_FULFILLED, payload: {
         id: counter.id,
+        appUserId: counter.appUserId,
         value: counter.tableData
     }})
 }
@@ -97,12 +100,13 @@ export const updateCounter = (val, id) => {
     }
 }
 
-export const createCounter = userId => {
+export const createCounter = appUserId => {
     return (dispatch) => {
         dispatch(createCounterPending())
-        return axios.post('/storedCounter', {userId, init: 0})
+        return axios.post('/storedCounter', {appUserId, please: true})
             .then(response => {
                 dispatch(createCounterFulfilled(response.data))
+                dispatch(push('/sample'))
             })
             .catch(error => {
                 dispatch(createCounterRejected(error))
@@ -117,9 +121,10 @@ export const login = token => {
             .then(response => {
                 const user = response.data
                 dispatch(loginFulfilled(user))
-                if (user.email) dispatch(createCounter(user.id)) //FIXME: could be done server-side?
+                if (user.email) dispatch(createCounter(user.id))
+                // FIXME: could be done server-side?
                 // FIXME: Change google CLIENT_ID !!!!!!
-                // TODO: Update API to consume userId
+                // TODO: Update API to consume appUserId
                 // TODO: Integrate with reducer to change state
                 // TODO: Push user to /sample route (the web storedCounter page)
                 // TODO: Kill/prevent multiple bundling processes

@@ -14,7 +14,7 @@ module.exports.register = token => {
             return appUserDao.getAppUser(authorizedUser)
         })
         .then(existingUser => {
-            if (existingUser) throw 'Already registered!';
+            if (existingUser) return existingUser.id;
             return appUserDao.createOrUpdateAppUser(new AppUser(appUser));
         })
 

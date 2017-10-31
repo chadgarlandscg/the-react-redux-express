@@ -7,7 +7,7 @@ class SqlTable extends bookshelf.Model {
         this.tableName = 'sql_table'
     }
     appUser(){
-        return this.hasOne(AppUser)
+        return this.belongsTo(AppUser)
     }
 }
 

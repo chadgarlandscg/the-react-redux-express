@@ -1,3 +1,4 @@
+require('dotenv').config()
 const options = {
     receive: function (data /* , result, e */) {
         camelizeColumnNames(data);

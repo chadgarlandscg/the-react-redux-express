@@ -7,7 +7,7 @@ var validate = require('express-validation');
 
 /* POST to create a counter */
 router.post('/', validate(validation.storedCounterCreate), (req, res, next) => {
-    storedCounterService.createStoredCounter(req.body.init)
+    storedCounterService.createStoredCounter(req.body)
         .then(id => res.status(200).send(id))
         .catch(error => next(error))
 });

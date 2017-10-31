@@ -8,9 +8,10 @@ module.exports.updateStoredCounter = (id, val) =>
             return storedCounterDao_bookshelf.createOrUpdateSql(storedCounter)
         })
 
-module.exports.createStoredCounter = init =>
+module.exports.createStoredCounter = counter =>
     storedCounterDao_bookshelf.createOrUpdateSql(new SqlTable({
-        tableData: init || 0
+        tableData: counter.init,
+        appUserId: counter.appUserId
     }))
 
 module.exports.getStoredCounter = id => storedCounterDao_bookshelf.getSql(id)

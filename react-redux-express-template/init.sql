@@ -16,6 +16,6 @@ CREATE TABLE nosql_table (
 
 CREATE TABLE sql_table (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES app_user(id),
+    app_user_id INT REFERENCES app_user(id),
     table_data REAL
 );
