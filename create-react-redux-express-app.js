@@ -418,7 +418,7 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
 
     if (ts) {
         for (let i = 0; i < types.length; i++){
-            packagesToSave.push(types[i])
+            packagesToSaveDev.push(types[i])
         }
 
         // create tsconfig.json, tsconfig.test.json, tslint.json
