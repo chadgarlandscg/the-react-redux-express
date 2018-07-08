@@ -153,10 +153,8 @@ const checkAppName = (appName) => {
     }
 
     const dependencies= ['react', 'react-dom']
-    const devDependencies = ['react-scripts']
-    const allDependencies = dependencies.concat(devDependencies).sort()
 
-    if (allDependencies.indexOf(appName) >= 0) {
+    if (dependencies.indexOf(appName) >= 0) {
         console.error('please choose different project name')
         process.exit(1)
     }
@@ -285,15 +283,18 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
 
     const tsconfig =    {
         "compilerOptions": {
-            "outDir": "dist",
-            "module": "esnext",
+            "outDir": "web/dist",
+            "module": "commonjs",
             "target": "es6",
+            "experimentalDecorators": true,
             "lib": ["es6", "dom"],
+            "types": ["reflect-metadata", "node", "redux-thunk"],
             "sourceMap": true,
             "allowJs": true,
             "jsx": "react",
             "moduleResolution": "node",
-            "rootDir": "src"
+            "pretty": true,
+            "emitDecoratorMetadata": true
         },
         "exclude": [
             "node_modules",
@@ -405,10 +406,8 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
     // npm install --save [--verbose]
     const command = 'npm'
     let saveArgs = ['install', '--save', verbose && '--verbose'].filter(e => e)
-    let saveDevArgs = ['install', '--save-dev', verbose && '--verbose'].filter(e => e)
 
     let packagesToSave = []
-    let packagesToSaveDev = []
 
     if (useAdditionalPackages) {
         for (let i = 0; i < additionalPackages.length; i++){
@@ -455,10 +454,6 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
     //finds the template directory
     const templatePath = path.join(ownPath)
 
-    console.log(chalk.bgCyan('ownPath:'), ownPath)
-    console.log(chalk.bgCyan('appPath:'), appPath)
-    console.log(chalk.bgCyan('templatePath:'), templatePath)
-
     const templatePackageJSON = require(path.join(templatePath, 'package.json'))
 
     templatePackageJSON.name = appName
@@ -467,7 +462,6 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
     templatePackageJSON.description = 'some ' + appName + ' description'
     templatePackageJSON.license = templatePackageJSON.license || 'BSD'
     templatePackageJSON.dependencies = templatePackageJSON.dependencies || {}
-    templatePackageJSON.devDependencies = templatePackageJSON.devDependencies || {}
 
     //copies template directory to appPath
     // the template/package.json is copied over.
@@ -484,19 +478,14 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
         JSON.stringify(templatePackageJSON, null, 2)
     )
 
-    if (templatePackageJSON.dependencies !== {} || templatePackageJSON.devDependencies !== {}) {
+    if (templatePackageJSON.dependencies !== {} ) {
         if (templatePackageJSON.dependencies !== {}) {
             packagesToSave.push.apply(Object.keys(templatePackageJSON.dependencies))
-        }
-
-        if (templatePackageJSON.devDependencies !== {}) {
-            packagesToSaveDev.push.apply(Object.keys(templatePackageJSON.devDependencies))
         }
     }
 
     //run npm install after the template has been copied over to prevent template/package.json from being overwritten
     runCommand(command, saveArgs.concat(packagesToSave), {stdio: 'inherit'})
-    runCommand(command, saveDevArgs.concat(packagesToSaveDev), {stdio: 'inherit'})
 
 
     //rename .gitignore because npm has renamed it .npmignore
