@@ -225,10 +225,6 @@ const fixDependencies = (packageName) => {
         process.exit(1)
     }
 
-    packageJson.devDependencies = packageJson.devDependencies || {}
-    packageJson.devDependencies[packageName] = packageVersion
-    delete packageJson.dependencies[packageName]
-
     fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2))
 }
 
@@ -417,7 +413,7 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
 
     if (ts) {
         for (let i = 0; i < types.length; i++){
-            packagesToSaveDev.push(types[i])
+            packagesToSave.push(types[i])
         }
 
         // create tsconfig.json, tsconfig.test.json, tslint.json
