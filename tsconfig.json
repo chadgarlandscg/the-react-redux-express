@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+      "outDir": "web/dist",
+      "module": "commonjs",
+      "target": "es6",
+      "experimentalDecorators": true,
+      "lib": ["es6", "dom"],
+      "types": ["reflect-metadata", "node", "redux-thunk", "jest"],
+      "sourceMap": true,
+      "allowJs": true,
+      "jsx": "react",
+      "moduleResolution": "node",
+      "pretty": true,   
+      "noErrorTruncation": true,
+      "emitDecoratorMetadata": true
+    },
+  
+    "exclude": [
+      "node_modules",
+      "server",
+      "public",
+      "scripts",
+      "src/setupTests.ts"
+    ],
+    "include": [
+      "web/src/**/*.tsx",
+      "web/src/**/*.ts"
+    ]
+  }
+  

@@ -1,15 +1,6 @@
 #!/usr/bin/env node
 
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
-'use strict'
+'use-strict'
 
 const chalk = require('chalk')
 const validateProjectName = require('validate-npm-package-name')
@@ -25,9 +16,12 @@ const hyperquest = require('hyperquest')
 
 const currentPackageJSON = require('./package.json')
 
+
 const helpLog = () => {
     console.log('help: ')
-    console.log('--ts for typescript')
+    console.log('--verbose', 'print additional logs')
+    console.log('--template-version <alternative-package>', 'use a different template')
+    console.log('--no additional-packages', 'only use dependencies from your template')
 }
 
 const undefinedProjectName = () => {
@@ -51,16 +45,16 @@ let projectName
 
 const templateCreator = commander
 
+
 templateCreator
-    .version(currentPackageJSON.version)
-    .arguments('<project-directory>')
-    .usage(chalk.magenta('<project-directory>') + ' [options] ')
-    .action((name) => { projectName = name})
-    .option('--verbose', 'print additional logs')
-    .option('--template-version <alternative-package>', 'use a different template')
-    .option('--no additional-packages', 'only use dependencies from your template')
-    .option('--ts', 'include typescript extras')
-    .allowUnknownOption().on('--help', ()=> {
+.version(currentPackageJSON.version)
+.arguments('<project-directory>')
+.usage(chalk.magenta('<project-directory>') + ' [options] ')
+.action((name) => { projectName = name})
+.option('--verbose', 'print additional logs')
+.option('--template-version <alternative-package>', 'use a different template')
+.option('--no-additional-packages', 'only use dependencies from your template')
+.allowUnknownOption().on('--help', ()=> {
     helpLog()
 }).parse(process.argv)
 
@@ -130,10 +124,7 @@ const getPackageName = (installPackage) => {
 }
 
 const getInstallPackage = (version, ts) => {
-    let packageToInstall = 'react-redux-express-template'
-    if (ts) {
-        packageToInstall = 'react-redux-express-ts-template'
-    }
+    const packageToInstall = 'react-redux-express-ts-template'
     const validSemVer = semver.valid(version)
     if (validSemVer) {
         packageToInstall += '@' + validSemVer
@@ -146,13 +137,14 @@ const getInstallPackage = (version, ts) => {
 const checkAppName = (appName) => {
     const validateResult = validateProjectName(appName)
     if (!validateResult.validForNewPackages) {
-        console.log('cannot create projected called' + chalk.blue(appName) + 'b/c npm naming restrictions' )
+        console.log('cannot create projected called' + chalk.blue(appName) + 'b/c npm naming restrictions.' )
         printValidationResults(validateResult.errors)
         printValidationResults(validateResult.warnings)
         process.exit(1)
     }
 
     const dependencies= ['react', 'react-dom']
+    const allDependencies = dependencies.sort()
 
     if (dependencies.indexOf(appName) >= 0) {
         console.error('please choose different project name')
@@ -161,17 +153,6 @@ const checkAppName = (appName) => {
 
 }
 
-const extractStream = (stream, dest) => {
-    return new Promise((resolve, reject) => {
-        stream.pipe(unpack(dest, (err) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(dest)
-            }
-        }))
-    })
-}
 
 const checkNpmVersion = () => {
     let isNpm2 = false
@@ -216,7 +197,7 @@ const fixDependencies = (packageName) => {
         process.exit(1)
     }
 
-    const  packageVersion = packageJson.dependencies[packageName]
+    const packageVersion = packageJson.dependencies[packageName]
 
     if (typeof packageVersion === 'undefined') {
         console.error(
@@ -237,7 +218,6 @@ const isSafeToCreateProjectIn = (root) => {
             return validFiles.indexOf(file) >= 0
         })
 }
-
 
 const initialize = (appPath, appName, packageName, verbose, originalDir, useAdditionalPackages, ts) => {
 
@@ -277,126 +257,10 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
         'redux-thunk'
     ]
 
-    const tsconfig =    {
-        "compilerOptions": {
-            "outDir": "web/dist",
-            "module": "commonjs",
-            "target": "es6",
-            "experimentalDecorators": true,
-            "lib": ["es6", "dom"],
-            "types": ["reflect-metadata", "node", "redux-thunk"],
-            "sourceMap": true,
-            "allowJs": true,
-            "jsx": "react",
-            "moduleResolution": "node",
-            "pretty": true,
-            "emitDecoratorMetadata": true
-        },
-        "exclude": [
-            "node_modules",
-            "build",
-            "scripts",
-            "acceptance-tests",
-            "jest",
-        ]
-    }
-
-    const tsconfigTest = {
-        "extends": "./tsconfig.json",
-        "compilerOptions": {
-            "module": "commonjs"
-        }
-    }
-
-    const tslint = {
-        "extends": ["tslint-react"],
-        "rules": {
-            "align": [
-                true,
-                "parameters",
-                "arguments",
-                "statements"
-            ],
-            "ban": false,
-            "class-name": true,
-            "comment-format": [
-                true,
-                "check-space"
-            ],
-            "curly": true,
-            "eofline": false,
-            "forin": true,
-            "indent": [ true, "spaces" ],
-            "interface-name": [true, "never-prefix"],
-            "jsdoc-format": true,
-            "jsx-no-lambda": false,
-            "jsx-no-multiline-js": false,
-            "label-position": true,
-            "max-line-length": [ true, 120 ],
-            "member-ordering": [
-                true,
-                "public-before-private",
-                "static-before-instance",
-                "variables-before-functions"
-            ],
-            "no-any": false,
-            "no-arg": true,
-            "no-bitwise": true,
-            "no-consecutive-blank-lines": true,
-            "no-construct": true,
-            "no-debugger": true,
-            "no-duplicate-variable": true,
-            "no-empty": true,
-            "no-eval": true,
-            "no-shadowed-variable": false,
-            "no-string-literal": true,
-            "no-switch-case-fall-through": true,
-            "no-trailing-whitespace": false,
-            "no-unused-expression": true,
-            "no-use-before-declare": true,
-            "one-line": [
-                true,
-                "check-catch",
-                "check-else",
-                "check-open-brace",
-                "check-whitespace"
-            ],
-            "quotemark": [true, "single", "jsx-double"],
-            "semicolon": [true, "never", "ignore-interfaces"],
-            "switch-default": true,
-
-            "trailing-comma": false,
-
-            "triple-equals": [ true, "allow-null-check" ],
-            "typedef": [
-                true,
-                "parameter",
-                "property-declaration"
-            ],
-            "typedef-whitespace": [
-                true,
-                {
-                    "call-signature": "nospace",
-                    "index-signature": "nospace",
-                    "parameter": "nospace",
-                    "property-declaration": "nospace",
-                    "variable-declaration": "nospace"
-                }
-            ],
-            "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
-            "whitespace": [
-                true,
-                "check-branch",
-                "check-decl",
-                "check-module",
-                "check-operator",
-                "check-separator",
-                "check-type",
-                "check-typecast"
-            ]
-        }
-    }
-
+    const tsconfig = require('./tsconfig.json')
+    const tslint = require('./tslint.json')
+    const envProd = 'NODE_ENV=production'
+    const envLocal = 'NODE_ENV=development'
 
     //command line command:
     // npm install --save [--verbose]
@@ -411,26 +275,27 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
         }
     }
 
-    if (ts) {
-        for (let i = 0; i < types.length; i++){
-            packagesToSave.push(types[i])
-        }
-
-        // create tsconfig.json, tsconfig.test.json, tslint.json
-        fs.writeFileSync(
-            path.join(appPath, 'tsconfig.json'),
-            JSON.stringify(tsconfig, null, 2)
-        )
-        fs.writeFileSync(
-            path.join(appPath, 'tsconfig.test.json'),
-            JSON.stringify(tsconfigTest, null, 2)
-        )
-        fs.writeFileSync(
-            path.join(appPath, 'tslint.json'),
-            JSON.stringify(tslint, null, 2)
-        )
-
+    for (let i = 0; i < types.length; i++){
+        packagesToSave.push(types[i])
     }
+
+    // create tsconfig.json, tsconfig.test.json, tslint.json
+    fs.writeFileSync(
+        path.join(appPath, 'tsconfig.json'),
+        JSON.stringify(tsconfig, null, 2)
+    )
+    fs.writeFileSync(
+        path.join(appPath, 'tslint.json'),
+        JSON.stringify(tslint, null, 2)
+    )
+    fs.writeFileSync(
+        path.join(appPath, '.env.prod'),
+        envProd
+    )
+    fs.writeFileSync(
+        path.join(appPath, '.env.local'),
+        envLocal
+    )
 
     //runs command line commands
     const runCommand = (command, args, type) => {
@@ -513,7 +378,10 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
         cdpath = appPath
     }
 
-    /*SUCCESS FUNCTION*/
+    success(appName, cdpath, readmeExists)
+}
+
+const success = (appName, cdpath, readmeExists) => {
     console.log()
     console.log(chalk.bgCyan('***************************************************************'))
     console.log(chalk.cyan(`SUCCESS!`))
@@ -528,10 +396,8 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
     console.log(chalk.bgCyan('***********************************************'))
 }
 
-
-
-const run = (root, appName, version, verbose, originalDir, noAdditionalPackages, ts) => {
-    const packageToInstall = getInstallPackage(version, ts)
+const run = (root, appName, version, verbose, originalDir, noAdditionalPackages) => {
+    const packageToInstall = getInstallPackage(version)
     const packageDependencies = [packageToInstall]
 
     console.log(chalk.magenta('beginning install, it may take awhile...'))
@@ -548,7 +414,7 @@ const run = (root, appName, version, verbose, originalDir, noAdditionalPackages,
             checkNodeVersion(packageName)
             fixDependencies(packageName)
 
-            initialize(root, appName, packageName, verbose, originalDir, noAdditionalPackages, ts)
+            initialize(root, appName, packageName, verbose, originalDir, noAdditionalPackages)
         })
         .catch((
             reason) => {
@@ -582,7 +448,6 @@ const run = (root, appName, version, verbose, originalDir, noAdditionalPackages,
         })
 }
 
-
 const install = (dependencies, verbose) => {
     return new Promise((resolve, reject) => {
         let command
@@ -609,6 +474,7 @@ const install = (dependencies, verbose) => {
         })
     })
 }
+
 
 const createApp = (name, verbose, version, noAdditionalPackages, ts) => {
     const root = path.resolve(name)
@@ -640,8 +506,4 @@ const createApp = (name, verbose, version, noAdditionalPackages, ts) => {
     run(root, appName, version, verbose, originalDirectory, noAdditionalPackages, ts)
 }
 
-
-
-
-createApp(projectName, templateCreator.verbose, templateCreator.scriptsVersion, templateCreator.noAdditionalPackages, templateCreator.ts)
-
+createApp(projectName, templateCreator.verbose, templateCreator.scriptsVersion, templateCreator.noAdditionalPackages)
