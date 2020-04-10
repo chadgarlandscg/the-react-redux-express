@@ -58,8 +58,9 @@ templateCreator
     .action((name) => { projectName = name})
     .option('--verbose', 'print additional logs')
     .option('--template-version <alternative-package>', 'use a different template')
-    .option('--no additional-packages', 'only use dependencies from your template')
-    .option('--ts', 'include typescript extras')
+    .option('--no-additional-packages', 'only use dependencies from your template')
+    .option('--ts', 'create typescript project')
+    .option('--examples', 'use typescript examples')
     .allowUnknownOption().on('--help', ()=> {
     helpLog()
 }).parse(process.argv)
@@ -129,10 +130,12 @@ const getPackageName = (installPackage) => {
     return Promise.resolve(installPackage)
 }
 
-const getInstallPackage = (version, ts) => {
+const getInstallPackage = (version, ts, examples) => {
     let packageToInstall = 'react-redux-express-template'
-    if (ts) {
+    if (ts && examples) {
         packageToInstall = 'react-redux-express-ts-template'
+    } else if (ts) {
+        packageToInstall = 'react-redux-express-template-empty'
     }
     const validSemVer = semver.valid(version)
     if (validSemVer) {
@@ -455,9 +458,9 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
     //finds the template directory
     const templatePath = path.join(ownPath)
 
-    console.log(chalk.bgCyan('ownPath:'), ownPath)
-    console.log(chalk.bgCyan('appPath:'), appPath)
-    console.log(chalk.bgCyan('templatePath:'), templatePath)
+    // console.log(chalk.bgCyan('ownPath:'), ownPath)
+    // console.log(chalk.bgCyan('appPath:'), appPath)
+    // console.log(chalk.bgCyan('templatePath:'), templatePath)
 
     const templatePackageJSON = require(path.join(templatePath, 'package.json'))
 
@@ -545,8 +548,8 @@ const initialize = (appPath, appName, packageName, verbose, originalDir, useAddi
 
 
 
-const run = (root, appName, version, verbose, originalDir, noAdditionalPackages, ts) => {
-    const packageToInstall = getInstallPackage(version, ts)
+const run = (root, appName, version, verbose, originalDir, noAdditionalPackages, ts, examples) => {
+    const packageToInstall = getInstallPackage(version, ts, examples)
     const packageDependencies = [packageToInstall]
 
     console.log(chalk.magenta('beginning install, it may take awhile...'))
@@ -625,7 +628,7 @@ const install = (dependencies, verbose) => {
     })
 }
 
-const createApp = (name, verbose, version, noAdditionalPackages, ts) => {
+const createApp = (name, verbose, version, noAdditionalPackages, ts, examples) => {
     const root = path.resolve(name)
     const appName = path.basename(root)
 
@@ -652,11 +655,11 @@ const createApp = (name, verbose, version, noAdditionalPackages, ts) => {
     const originalDirectory = process.cwd()
     process.chdir(root)
 
-    run(root, appName, version, verbose, originalDirectory, noAdditionalPackages, ts)
+    run(root, appName, version, verbose, originalDirectory, noAdditionalPackages, ts, examples)
 }
 
 
 
 
-createApp(projectName, templateCreator.verbose, templateCreator.scriptsVersion, templateCreator.noAdditionalPackages, templateCreator.ts)
+createApp(projectName, templateCreator.verbose, templateCreator.scriptsVersion, templateCreator.noAdditionalPackages, templateCreator.ts, templateCreator.examples)
 
